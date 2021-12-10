@@ -4,7 +4,7 @@ group "default" {
 
 target "ffmpeg" {
     dockerfile = "Dockerfile"
-    tags = ["andrewchen5678/ffmpeg"]
+    tags = ["andrewchen5678/static-ffmpeg"]
 }
 
 target "ffmpeg_multi" {

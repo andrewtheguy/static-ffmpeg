@@ -13,5 +13,5 @@ target "ffmpeg_multi" {
 }
 
 group "image-all" {
-    targets = ["ffmpeg","ffmpeg_multi"]
+    targets = ["ffmpeg_multi"]
 }

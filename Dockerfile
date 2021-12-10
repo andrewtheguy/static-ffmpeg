@@ -53,9 +53,10 @@ ARG OPUS_SHA256=65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d
 # bump: theora after ./hashupdate Dockerfile THEORA $LATEST
 # bump: theora link "Release notes" https://github.com/xiph/theora/releases/tag/v$LATEST
 # bump: theora link "Source diff $CURRENT..$LATEST" https://github.com/xiph/theora/compare/v$CURRENT..v$LATEST
-ARG THEORA_VERSION=1.1.1
-ARG THEORA_URL="https://downloads.xiph.org/releases/theora/libtheora-$THEORA_VERSION.tar.bz2"
-ARG THEORA_SHA256=b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
+# skiping because doesn't work on raspberrypi
+# ARG THEORA_VERSION=1.1.1
+# ARG THEORA_URL="https://downloads.xiph.org/releases/theora/libtheora-$THEORA_VERSION.tar.bz2"
+# ARG THEORA_SHA256=b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
 # bump: libvpx /VPX_VERSION=([\d.]+)/ https://github.com/webmproject/libvpx.git|*
 # bump: libvpx after ./hashupdate Dockerfile VPX $LATEST
 # bump: libvpx link "CHANGELOG" https://github.com/webmproject/libvpx/blob/master/CHANGELOG
@@ -284,7 +285,7 @@ RUN \
   libogg: env.OGG_VERSION, \
   libvorbis: env.VORBIS_VERSION, \
   libopus: env.OPUS_VERSION, \
-  libtheora: env.THEORA_VERSION, \
+  #libtheora: env.THEORA_VERSION, \
   libvpx: env.VPX_VERSION, \
   libx264: env.X264_VERSION, \
   libx265: env.X265_VERSION, \
@@ -360,12 +361,12 @@ RUN \
   cd opus-* && ./configure --disable-shared --enable-static --disable-extra-programs && \
   make -j$(nproc) install
 
-RUN \
-  wget -O libtheora.tar.bz2 "$THEORA_URL" && \
-  echo "$THEORA_SHA256  libtheora.tar.bz2" | sha256sum --status -c - && \
-  tar xf libtheora.tar.bz2 && \
-  cd libtheora-* && ./configure --disable-examples --disable-shared --enable-static && \
-  make -j$(nproc) install
+#RUN \
+#  wget -O libtheora.tar.bz2 "$THEORA_URL" && \
+#  echo "$THEORA_SHA256  libtheora.tar.bz2" | sha256sum --status -c - && \
+#  tar xf libtheora.tar.bz2 && \
+#  cd libtheora-* && ./configure --disable-examples --disable-shared --enable-static && \
+#  make -j$(nproc) install
 
 RUN \
   wget -O libvpx.tar.gz "$VPX_URL" && \
@@ -592,7 +593,7 @@ RUN \
   --enable-libfdk-aac \
   --enable-libvorbis \
   --enable-libopus \
-  --enable-libtheora \
+#  --enable-libtheora \
   --enable-libvpx \
   --enable-libx264 \
   --enable-libx265 \

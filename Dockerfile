@@ -534,6 +534,7 @@ RUN \
   cd libmodplug-* && ./configure --disable-shared --enable-static && \
   make -j$(nproc) install
 
+# won't work with arm64
 #RUN \
 #  git clone "$UAVS3D_URL" && \
 #  cd uavs3d && git checkout $UAVS3D_COMMIT && \

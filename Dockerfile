@@ -267,61 +267,6 @@ RUN apk add --no-cache \
 #RUN cargo install --version 0.9.5 cargo-c
 
 RUN \
-  OPENSSL_VERSION=$(pkg-config --modversion openssl) \
-  LIBXML2_VERSION=$(pkg-config --modversion libxml-2.0) \
-  EXPAT_VERSION=$(pkg-config --modversion expat) \
-  FREETYPE_VERSION=$(pkg-config --modversion freetype2)  \
-  FONTCONFIG_VERSION=$(pkg-config --modversion fontconfig)  \
-  FRIBIDI_VERSION=$(pkg-config --modversion fribidi)  \
-  SOXR_VERSION=$(pkg-config --modversion soxr) \
-  FFTW_VERSION=$(pkg-config --modversion fftw3) \
-  LIBSAMPLERATE_VERSION=$(pkg-config --modversion samplerate) \
-  jq -n \
-  '{ \
-  ffmpeg: env.FFMPEG_VERSION, \
-  openssl: env.OPENSSL_VERSION, \
-  libxml2: env.LIBXML2_VERSION, \
-  expat: env.EXPAT_VERSION, \
-  libmp3lame: env.MP3LAME_VERSION, \
-  libtwolame: env.TWOLAME_VERSION, \
-  "libfdk-aac": env.FDK_AAC_VERSION, \
-  libogg: env.OGG_VERSION, \
-  libvorbis: env.VORBIS_VERSION, \
-  libopus: env.OPUS_VERSION, \
-  #libtheora: env.THEORA_VERSION, \
-  libvpx: env.VPX_VERSION, \
-  libx264: env.X264_VERSION, \
-  libx265: env.X265_VERSION, \
-  libwebp: env.LIBWEBP_VERSION, \
-  libspeex: env.SPEEX_VERSION, \
-  libvmaf: env.VMAF_VERSION, \
-  libaom: env.AOM_VERSION, \
-  libvidstab: env.VIDSTAB_VERSION, \
-  libkvazaar: env.KVAZAAR_VERSION, \
-  libfreetype: env.FREETYPE_VERSION, \
-  fontconfig: env.FONTCONFIG_VERSION, \
-  libfribidi: env.FRIBIDI_VERSION, \
-  libass: env.LIBASS_VERSION, \
-  libzimg: env.ZIMG_VERSION, \
-  libsoxr: env.SOXR_VERSION, \
-  libopenjpeg: env.OPENJPEG_VERSION, \
-  libdav1d: env.DAV1D_VERSION, \
-  libxvid: env.XVID_VERSION, \
-  #librav1e: env.RAV1E_VERSION, \
-  libsrt: env.SRT_VERSION, \
-  libsvtav1: env.SVTAV1_VERSION, \
-  libdavs2: env.DAVS2_VERSION, \
-  libxavs2: env.XAVS2_VERSION, \
-  libmodplug: env.LIBMODPLUG_VERSION, \
-  libuavs3d: env.UAVS3D_COMMIT, \
-  libmysofa: env.LIBMYSOFA_VERSION, \
-  libsamplerate: env.LIBSAMPLERATE_VERSION, \
-  librubberband: env.RUBBERBAND_VERSION, \
-  libgme: env.LIBGME_COMMIT, \
-  fftw: env.FFTW_VERSION, \
-  }' > /versions.json
-
-RUN \
   wget -O lame.tar.gz "$MP3LAME_URL" && \
   echo "$MP3LAME_SHA256  lame.tar.gz" | sha256sum --status -c - && \
   tar xf lame.tar.gz && \
@@ -629,6 +574,63 @@ RUN \
   --enable-libgme \
   || (cat ffbuild/config.log ; false) \
   && make -j$(nproc) install
+
+# move to the bottom so that one change won't force recompiling everything
+RUN \
+  OPENSSL_VERSION=$(pkg-config --modversion openssl) \
+  LIBXML2_VERSION=$(pkg-config --modversion libxml-2.0) \
+  EXPAT_VERSION=$(pkg-config --modversion expat) \
+  FREETYPE_VERSION=$(pkg-config --modversion freetype2)  \
+  FONTCONFIG_VERSION=$(pkg-config --modversion fontconfig)  \
+  FRIBIDI_VERSION=$(pkg-config --modversion fribidi)  \
+  SOXR_VERSION=$(pkg-config --modversion soxr) \
+  FFTW_VERSION=$(pkg-config --modversion fftw3) \
+  LIBSAMPLERATE_VERSION=$(pkg-config --modversion samplerate) \
+  jq -n \
+  '{ \
+  ffmpeg: env.FFMPEG_VERSION, \
+  openssl: env.OPENSSL_VERSION, \
+  libxml2: env.LIBXML2_VERSION, \
+  expat: env.EXPAT_VERSION, \
+  libmp3lame: env.MP3LAME_VERSION, \
+  libtwolame: env.TWOLAME_VERSION, \
+  "libfdk-aac": env.FDK_AAC_VERSION, \
+  libogg: env.OGG_VERSION, \
+  libvorbis: env.VORBIS_VERSION, \
+  libopus: env.OPUS_VERSION, \
+  #libtheora: env.THEORA_VERSION, \
+  libvpx: env.VPX_VERSION, \
+  libx264: env.X264_VERSION, \
+  libx265: env.X265_VERSION, \
+  libwebp: env.LIBWEBP_VERSION, \
+  libspeex: env.SPEEX_VERSION, \
+  libvmaf: env.VMAF_VERSION, \
+  libaom: env.AOM_VERSION, \
+  libvidstab: env.VIDSTAB_VERSION, \
+  libkvazaar: env.KVAZAAR_VERSION, \
+  libfreetype: env.FREETYPE_VERSION, \
+  fontconfig: env.FONTCONFIG_VERSION, \
+  libfribidi: env.FRIBIDI_VERSION, \
+  libass: env.LIBASS_VERSION, \
+  libzimg: env.ZIMG_VERSION, \
+  libsoxr: env.SOXR_VERSION, \
+  libopenjpeg: env.OPENJPEG_VERSION, \
+  libdav1d: env.DAV1D_VERSION, \
+  libxvid: env.XVID_VERSION, \
+  #librav1e: env.RAV1E_VERSION, \
+  libsrt: env.SRT_VERSION, \
+  libsvtav1: env.SVTAV1_VERSION, \
+  libdavs2: env.DAVS2_VERSION, \
+  libxavs2: env.XAVS2_VERSION, \
+  libmodplug: env.LIBMODPLUG_VERSION, \
+  libuavs3d: env.UAVS3D_COMMIT, \
+  libmysofa: env.LIBMYSOFA_VERSION, \
+  libsamplerate: env.LIBSAMPLERATE_VERSION, \
+  librubberband: env.RUBBERBAND_VERSION, \
+  libgme: env.LIBGME_COMMIT, \
+  fftw: env.FFTW_VERSION, \
+  }' > /versions.json
+
 
 # make sure binaries has no dependencies, is relro, pie and stack nx
 COPY checkelf /

@@ -219,7 +219,7 @@ ARG LDFLAGS="-Wl,-z,relro,-z,now"
 
 RUN apk add --no-cache \
   coreutils \
-  rust cargo \
+  #rust cargo \ disable to save time
   openssl openssl-dev openssl-libs-static \
   ca-certificates \
   bash \
@@ -261,7 +261,10 @@ RUN apk add --no-cache \
   xxd
 
 # debug builds a bit faster and we don't care about runtime speed
-RUN cargo install --debug --version 0.9.5 cargo-c
+#RUN cargo install --debug --version 0.9.5 cargo-c
+
+# disable cargo to save build time
+#RUN cargo install --version 0.9.5 cargo-c
 
 RUN \
   OPENSSL_VERSION=$(pkg-config --modversion openssl) \
@@ -304,7 +307,7 @@ RUN \
   libopenjpeg: env.OPENJPEG_VERSION, \
   libdav1d: env.DAV1D_VERSION, \
   libxvid: env.XVID_VERSION, \
-  librav1e: env.RAV1E_VERSION, \
+  #librav1e: env.RAV1E_VERSION, \
   libsrt: env.SRT_VERSION, \
   libsvtav1: env.SVTAV1_VERSION, \
   libdavs2: env.DAVS2_VERSION, \
@@ -476,17 +479,18 @@ RUN \
   CFLAGS="$CFLAGS -fstrength-reduce -ffast-math" ./configure && \
   make -j$(nproc) && make install
 
-# cargo fetch as it seems the cargo-c binary (see comment at top) has ssl issues sometimes
-RUN \
-  wget -O rav1e.tar.gz "$RAV1E_URL" && \
-  echo "$RAV1E_SHA256  rav1e.tar.gz" | sha256sum --status -c - && \
-  tar xf rav1e.tar.gz && \
-  cd rav1e-* && \
-  cargo fetch && \
-  cargo cinstall --release
-# cargo-c/alpine rustc results in Libs.private depend on gcc_s
-# https://gitlab.alpinelinux.org/alpine/aports/-/issues/11806
-RUN sed -i 's/-lgcc_s//' /usr/local/lib/pkgconfig/rav1e.pc
+#disable to save build time
+# # cargo fetch as it seems the cargo-c binary (see comment at top) has ssl issues sometimes
+# RUN \
+#   wget -O rav1e.tar.gz "$RAV1E_URL" && \
+#   echo "$RAV1E_SHA256  rav1e.tar.gz" | sha256sum --status -c - && \
+#   tar xf rav1e.tar.gz && \
+#   cd rav1e-* && \
+#   cargo fetch && \
+#   cargo cinstall --release
+# # cargo-c/alpine rustc results in Libs.private depend on gcc_s
+# # https://gitlab.alpinelinux.org/alpine/aports/-/issues/11806
+# RUN sed -i 's/-lgcc_s//' /usr/local/lib/pkgconfig/rav1e.pc
 
 RUN \
   wget -O libsrt.tar.gz "$SRT_URL" && \
@@ -613,7 +617,7 @@ RUN \
   --enable-libopenjpeg \
   --enable-libdav1d \
   --enable-libxvid \
-  --enable-librav1e \
+#  --enable-librav1e \
   --enable-libsrt \
   --enable-libsvtav1 \
   --enable-libdavs2 \

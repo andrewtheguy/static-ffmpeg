@@ -1,10 +1,14 @@
+variable "TAG" {
+    default = "latest"
+}
+
 group "default" {
     targets = ["ffmpeg"]
 }
 
 target "ffmpeg" {
     dockerfile = "Dockerfile"
-    tags = ["andrewchen5678/static-ffmpeg"]
+    tags = ["andrewchen5678/static-ffmpeg:${TAG}"]
 }
 
 target "ffmpeg_multi" {
